@@ -1,0 +1,15 @@
+# Файл docker-compose начинается с тега версии.
+version: 3.9
+
+# Pабота docker-compose происходит с сервисами (набор контейнеров или образов)
+services:
+  mariaDataBase:
+    # Указание имени контейнера
+    container_name: mariadb
+    # Команда build позволяет запускать сборку контейнера из образа, по указанному пути.blkio_config:
+    build: ./requirements/mariadb/
+    # Команда restart: определяет политику перезапуска контейнера.blkio_config:
+    restart: always
+    # env_file: команда определяющая добавление файла с встроенными переменными.
+    env_file: .env
+
