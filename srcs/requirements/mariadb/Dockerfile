@@ -1,3 +1,13 @@
+#Этапы запуска контейнера:
+# 1) Создание образа docker build -t maria .
+# 2) Обычный запуск образа:
+# docker run -p 8000:3306 -d  --name mariadb maria
+
+# Интерактивный формат запущенного контейнера :
+# docker exec -it mariadb sh
+
+# Подключение к mysql:
+# mysql -u mrudge -p
 FROM debian:buster
 
 # Install the server

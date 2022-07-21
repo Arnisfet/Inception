@@ -1,6 +1,6 @@
 CREATE DATABASE wordpress;
 CREATE USER 'mrudge'@'%' IDENTIFIED BY '123123';
--- Для GRANT ALL привилегий для rbiodies, предоставляющих этому пользователю полный контроль над database wordpress
+-- Для GRANT ALL привилегий для , предоставляющих этому пользователю полный контроль над database wordpress
 -- Эти привилегии предназначены для wordpress применяются ко всем таблицам этой базы данных, 
 -- что обозначено .*следующим образом
 GRANT ALL PRIVILEGES ON wordpress.* TO 'mrudge'@'%';
