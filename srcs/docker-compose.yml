@@ -1,9 +1,9 @@
 # Файл docker-compose начинается с тега версии.
-version: 3.9
+version: '2.4'
 
 # Pабота docker-compose происходит с сервисами (набор контейнеров или образов)
 services:
-  mariaDataBase:
+  maria:
     # Указание имени контейнера
     container_name: mariadb
     # Команда build позволяет запускать сборку контейнера из образа, по указанному пути.blkio_config:
@@ -12,4 +12,15 @@ services:
     restart: always
     # env_file: команда определяющая добавление файла с встроенными переменными.
     env_file: .env
+    # volumes: определяет том на машине хосте который нужно смонтировать в папке с базой внутри контейнера
+    volumes:
+    - db:/var/lib/mysql
 
+volumes:
+  db:
+    name: db
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${USER}/Desktop/Inception/srcs/db
