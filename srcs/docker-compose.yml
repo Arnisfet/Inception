@@ -13,6 +13,11 @@ services:
     # env_file: команда определяющая добавление файла с встроенными переменными.
     env_file: .env
     # volumes: определяет том на машине хосте который нужно смонтировать в папке с базой внутри контейнера
+    
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx/
+    restart: always
 
 
 volumes:
