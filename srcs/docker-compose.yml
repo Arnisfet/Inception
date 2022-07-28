@@ -16,8 +16,13 @@ services:
     
   nginx:
     container_name: nginx
+    hostname: localhost
     build: ./requirements/nginx/
     restart: always
+    ports:
+      # - "8080:80" # http
+      - "443:443" # https
+
 
 
 volumes:
