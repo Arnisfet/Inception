@@ -13,16 +13,39 @@ services:
     # env_file: команда определяющая добавление файла с встроенными переменными.
     env_file: .env
     # volumes: определяет том на машине хосте который нужно смонтировать в папке с базой внутри контейнера
+    networks:
+      - project
     
   nginx:
     container_name: nginx
     hostname: localhost
+    volumes:
+      - wp:/var/www/html/wordpress
+    networks:
+      - project
+    depends_on:
+      - wordpress
     build: ./requirements/nginx/
     restart: always
     ports:
       # - "8080:80" # http
       - "443:443" # https
 
+  wordpress:
+    container_name: wordpress
+    env_file: .env
+    build: ./requirements/wordpress
+    volumes:
+      - wp:/var/www/html/wordpress
+    restart: always
+    networks:
+      - project
+  # этот параметр гарантирует, что наши контейнеры будут запускаться в порядке зависимости, 
+  # и контейнер wordpress запускается после контейнера mariadb. 
+  # Наше приложение WordPress зависит от наличия базы данных приложения и пользователя, 
+  # поэтому установка такого порядка зависимостей позволит выполнять запуск приложения корректно
+    depends_on:
+      - maria
 
 
 volumes:
@@ -33,3 +56,20 @@ volumes:
       type: none
       o: bind
       device: /home/${USER}/Desktop/Inception/srcs/db
+  wp:
+    name: wp
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${USER}/data/wp
+      
+# Создаваемая пользователем мостовая система project позволяет организовать коммуникацию между нашими контейнерами,
+# поскольку они находятся на одном хосте демона Docker.
+# Это позволяет организовать трафик и коммуникации внутри приложения, 
+# поскольку она открывает все порты между контейнерами в одной мостовой сети, скрывая все порты от внешнего мира. 
+# Таким образом, наши контейнеры mariadb, wordpress и nginx могут взаимодействовать друг с другом, 
+# и нам нужно будет только открыть порт 440 для внешнего доступа к приложению
+networks:
+  project:
+    driver: bridge
