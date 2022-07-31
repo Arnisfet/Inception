@@ -1,12 +1,34 @@
 FROM debian:buster
 
-RUN apt update
-RUN apt install -y php7.3 php-mysqli php-fpm curl sendmail
+#Install necessary package from php
+
+RUN apt-get update && apt-get -y install \
+wget \
+php \
+php-cgi \
+php-mysql \
+php-fpm \
+php-pdo \
+php-gd php-cli \
+php-mbstring \
+&& rm -rf /var/lib/apt/lists/*
+
+#Copy the necessary tools to download wordpress
+
+COPY ./conf/www.conf /var/www/html/
+COPY ./conf/wp-config.php /var/www/html/
+
+#Create the folder to enable php start
+
+RUN mkdir /run/php
+
+#Launch script
+
+COPY ./tools/create_wordpress.sh /usr/local/bin/
+ENTRYPOINT ["create_wordpress.sh"]
+
+WORKDIR /var/www/html/
 
 EXPOSE 9000
 
-COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d
-COPY ./tools /var/www/
-
-
-CMD sh /var/www/start.sh
+CMD ["/usr/sbin/php-fpm7.3", "-F"]
