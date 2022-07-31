@@ -9,4 +9,4 @@ COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d
 COPY ./tools /var/www/
 
 
-CMD bash /var/www/start.sh
+CMD sh /var/www/start.sh
