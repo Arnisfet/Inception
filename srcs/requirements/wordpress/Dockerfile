@@ -11,6 +11,7 @@ php-fpm \
 php-pdo \
 php-gd php-cli \
 php-mbstring \
+curl \
 && rm -rf /var/lib/apt/lists/*
 
 #Copy the necessary tools to download wordpress
@@ -24,11 +25,11 @@ RUN mkdir /run/php
 
 #Launch script
 
-COPY ./tools/create_wordpress.sh /usr/local/bin/
-ENTRYPOINT ["create_wordpress.sh"]
+COPY ./tools/create_wordpress.sh /tmp/
+#ENTRYPOINT ["create_wordpress.sh"]
 
 WORKDIR /var/www/html/
 
 EXPOSE 9000
 
-CMD ["/usr/sbin/php-fpm7.3", "-F"]
+CMD ["sh", "/tmp/create_wordpress.sh"]
